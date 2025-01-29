@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InOrder;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -145,6 +146,16 @@ class BookingSystemTest {
         assertThatThrownBy(() -> bookingSystem.cancelBooking(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Boknings-id kan inte vara null");
+    }
+    @Test
+    void shouldReturnFalseWhenNoBookingIsFound() {
+        String bookingId = "nonExistingId";
+
+        when(roomRepository.findAll()).thenReturn(Collections.emptyList());
+
+        boolean result = bookingSystem.cancelBooking(bookingId);
+
+        assertThat(result).isFalse();
     }
 
 
