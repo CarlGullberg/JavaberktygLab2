@@ -126,7 +126,20 @@ class BookingSystemTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Sluttid måste vara efter starttid");
     }
+    @Test
+    void shouldReturnAvailableRooms() {
+        LocalDateTime startTime = LocalDateTime.now().plusHours(1);
+        LocalDateTime endTime = startTime.plusHours(2);
 
+        Room availableRoom = mock(Room.class);
+        when(availableRoom.isAvailable(startTime, endTime)).thenReturn(true);
+
+        when(roomRepository.findAll()).thenReturn(List.of(availableRoom));
+
+        List<Room> result = bookingSystem.getAvailableRooms(startTime, endTime);
+
+        assertThat(result).containsExactly(availableRoom);
+    }
 
 
 
