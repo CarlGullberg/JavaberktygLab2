@@ -52,5 +52,39 @@ class BookingSystemTest {
         verifyNoInteractions(notificationService);
     }
 
+    @ParameterizedTest
+    @CsvSource({
+            "2023-01-01T12:00, 2023-01-01T13:00, true",
+            "2023-01-01T12:00, 2023-01-01T11:00, false",
+            "2023-01-02T12:00, 2023-01-01T12:00, false"
+    })
+    @DisplayName("Validates end time and start time")
+    void testBookingTimeValidation(String start, String end, boolean isValid) {
+        LocalDateTime startTime = LocalDateTime.parse(start);
+        LocalDateTime endTime = LocalDateTime.parse(end);
+        String roomId = "room-1";
+
+        when(timeProvider.getCurrentTime()).thenReturn(LocalDateTime.parse("2022-12-31T10:00"));
+        when(roomRepository.findById(roomId)).thenReturn(Optional.of(room));
+        when(room.isAvailable(startTime, endTime)).thenReturn(true);
+
+        if (!isValid) {
+            assertThatThrownBy(() -> bookingSystem.bookRoom(roomId, startTime, endTime))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("End time must be after the start time");
+        } else {
+            assertThat(bookingSystem.bookRoom(roomId, startTime, endTime)).isTrue();
+        }
+
+
+    }
+
+
+
+
+
+
+
+
 }
 
