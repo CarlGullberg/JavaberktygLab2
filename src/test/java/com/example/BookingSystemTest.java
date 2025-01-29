@@ -108,7 +108,15 @@ class BookingSystemTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Bokning kräver giltiga start- och sluttider samt rum-id");
     }
+    @Test
+    void shouldThrowExceptionWhenBookingInPast() {
+        LocalDateTime pastTime = LocalDateTime.now().minusHours(1);
+        when(timeProvider.getCurrentTime()).thenReturn(LocalDateTime.now());
 
+        assertThatThrownBy(() -> bookingSystem.bookRoom("room1", pastTime, pastTime.plusHours(1)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Kan inte boka tid i dåtid");
+    }
 
 
 
