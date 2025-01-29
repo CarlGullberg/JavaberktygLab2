@@ -140,6 +140,12 @@ class BookingSystemTest {
 
         assertThat(result).containsExactly(availableRoom);
     }
+    @Test
+    void shouldThrowExceptionWhenBookingIdIsNull() {
+        assertThatThrownBy(() -> bookingSystem.cancelBooking(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Boknings-id kan inte vara null");
+    }
 
 
 
