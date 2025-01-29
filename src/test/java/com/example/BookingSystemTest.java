@@ -117,6 +117,16 @@ class BookingSystemTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Kan inte boka tid i dåtid");
     }
+    @Test
+    void shouldThrowExceptionWhenEndTimeIsBeforeStartTime() {
+        LocalDateTime startTime = LocalDateTime.now().plusHours(2);
+        LocalDateTime endTime = startTime.minusHours(1);
+
+        assertThatThrownBy(() -> bookingSystem.getAvailableRooms(startTime, endTime))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Sluttid måste vara efter starttid");
+    }
+
 
 
 
