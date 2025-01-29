@@ -98,6 +98,17 @@ class BookingSystemTest {
                 .hasMessage("Bokning kräver giltiga start- och sluttider samt rum-id");
     }
 
+    @Test
+    void shouldThrowExceptionWhenRoomIdIsNull() {
+        LocalDateTime startTime = LocalDateTime.now().plusHours(1);
+        LocalDateTime endTime = startTime.plusHours(2);
+        when(timeProvider.getCurrentTime()).thenReturn(LocalDateTime.now());
+
+        assertThatThrownBy(() -> bookingSystem.bookRoom(null, startTime, endTime))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Bokning kräver giltiga start- och sluttider samt rum-id");
+    }
+
 
 
 
