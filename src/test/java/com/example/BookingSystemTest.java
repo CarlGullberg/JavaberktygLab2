@@ -180,6 +180,25 @@ class BookingSystemTest {
         verify(room, never()).removeBooking(anyString());
         verify(roomRepository, never()).save(any());
     }
+    @Test
+    @DisplayName("Should successfully cancel a future booking")
+    void shouldCancelFutureBookingSuccessfully() {
+        String bookingId = "futureBookingId";
+        LocalDateTime futureStartTime = LocalDateTime.now().plusHours(2);
+
+        Booking booking = mock(Booking.class);
+        when(booking.getStartTime()).thenReturn(futureStartTime);
+        when(timeProvider.getCurrentTime()).thenReturn(LocalDateTime.now());
+        when(room.hasBooking(bookingId)).thenReturn(true);
+        when(room.getBooking(bookingId)).thenReturn(booking);
+        when(roomRepository.findAll()).thenReturn(List.of(room));
+
+        boolean result = bookingSystem.cancelBooking(bookingId);
+
+        assertThat(result).isTrue();
+        verify(room).removeBooking(bookingId);
+        verify(roomRepository).save(room);
+    }
 
 }
 
