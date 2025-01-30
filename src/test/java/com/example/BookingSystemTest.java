@@ -159,7 +159,23 @@ class BookingSystemTest {
     }
 
 
+    @Test
+    void shouldThrowExceptionWhenBookingAlreadyStarted() {
+        String bookingId = "activeBookingId";
+        Room room = mock(Room.class);
+        Booking booking = mock(Booking.class);
 
+        LocalDateTime pastStartTime = LocalDateTime.now().minusHours(1);
+
+        when(room.getBooking(bookingId)).thenReturn(booking);
+        when(booking.getStartTime()).thenReturn(pastStartTime);
+        when(room.hasBooking(bookingId)).thenReturn(true);
+        when(roomRepository.findAll()).thenReturn(List.of(room));
+
+        assertThatThrownBy(() -> bookingSystem.cancelBooking(bookingId))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("Kan inte avboka påbörjad eller avslutad bokning");
+    }
 
 
 
