@@ -24,6 +24,12 @@ class ShoppingCartTest {
         cart.removeItem("apple");
         assertEquals(0, cart.getItemCount());
     }
+    @Test
+    void totalPriceCalculatesCorrectly() {
+        cart.addItem("apple", 2.0, 2); // 2 apples at 2.0 each = 4.0
+        cart.addItem("banana", 1.5, 3); // 3 bananas at 1.5 each = 4.5
+        assertEquals(8.5, cart.calculateTotalPrice());
+    }
 
 
 }
