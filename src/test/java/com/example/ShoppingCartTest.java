@@ -42,6 +42,11 @@ class ShoppingCartTest {
         cart.updateItemQuantity("apple", 5); // Update to 5 apples
         assertEquals(10.0, cart.calculateTotalPrice()); // 5 apples at 2.0 each = 10.0
     }
+    @Test
+    void emptyCartReturnsZeroTotal() {
+        assertEquals(0.0, cart.calculateTotalPrice());
+    }
+
 
 
 
