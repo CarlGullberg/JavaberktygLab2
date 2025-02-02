@@ -18,6 +18,13 @@ class ShoppingCartTest {
         assertEquals(1, cart.getItemCount());
     }
 
+    @Test
+    void removingItemDecreasesItemCount() {
+        cart.addItem("apple", 2.0, 1);
+        cart.removeItem("apple");
+        assertEquals(0, cart.getItemCount());
+    }
+
 
 }
 
