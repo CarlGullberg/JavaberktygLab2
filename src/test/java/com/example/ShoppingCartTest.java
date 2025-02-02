@@ -30,6 +30,13 @@ class ShoppingCartTest {
         cart.addItem("banana", 1.5, 3); // 3 bananas at 1.5 each = 4.5
         assertEquals(8.5, cart.calculateTotalPrice());
     }
+    @Test
+    void applyDiscountCorrectlyReducesPrice() {
+        cart.addItem("apple", 2.0, 2); // 4.0
+        cart.applyDiscount(0.1); // 10% discount
+        assertEquals(3.6, cart.calculateTotalPrice());
+    }
+
 
 
 }
